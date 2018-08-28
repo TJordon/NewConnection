@@ -1,0 +1,74 @@
+<apex:page docType="html-5.0"  controller="DescriptionController" standardStylesheets="false">
+<apex:slds />
+
+<table class="slds-table slds-table_bordered slds-table_cell-buffer slds-table_striped slds-no-row-hover">
+  <thead>
+    <tr class="slds-text-title_caps">
+      <th scope="col">
+        <div class="slds-truncate slds-align--absolute-center" title="Product Name"><h2>{!product[0].Product_Name__c}</h2></div>
+      </th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td data-label="Account Name">
+        <div class="slds-truncate" title="Cloudhub"><img src="{!product[0].Image_Url__c}" alt=""></img></div>
+        <div class="slds-truncate" title="4/14/2015">
+         <h3>Amount</h3>
+         <p>{!product[0].Units_Available__c}</p>
+         <h3>Description</h3>
+         <p>{!product[0].Product_Description__c}</p>
+       </div>
+     </td>
+     
+     
+   </tr>
+   <tr>
+    <td data-label="Contact">
+      <div class="slds-truncate slds-align--absolute-center" title="Buttons">
+       <a role="button" href="https://c.ap4.visual.force.com/apex/visualProducts?sfdc.tabName=01r6F000001djhV"  class="slds-button slds-button_outline-brand">Назад</a>
+       <a role="button" href="https://c.ap4.visual.force.com/apex/visualOrder?sfdc.tabName=01r6F000001dm1Q&id={!intId}"  class="slds-button slds-button_brand">Заказать</a>
+     </div>
+   </td>
+ </tr>
+</tbody>
+</table>
+
+<style>
+     .slds-scope .slds-table td {
+      display: flex;
+      justify-content: space-around;
+    }
+    .slds-truncate h2{
+      font-size: 25px;
+    }
+    .slds-truncate h3, .slds-truncate p{
+      margin-right: auto;
+    }
+    .slds-truncate p{
+      margin-bottom: 10px;
+      font-size: 16px;
+      color: #868686;
+    }
+    .slds-truncate h3{
+      font-size: 20px;
+      text-transform: uppercase;
+      color: #687C8E;
+    }
+    tr td .slds-truncate:nth-child(2){
+      max-width: 20%;
+      display: flex;
+      align-items: center;
+      flex-direction: column;
+    }
+    .slds-scope .slds-truncate{
+      white-space: normal;
+      padding: 10px;
+    }
+    .slds-scope img {
+      max-width: 100%;
+      height: auto;
+    }        
+</style>
+
+</apex:page>

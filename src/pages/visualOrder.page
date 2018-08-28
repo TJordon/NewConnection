@@ -1,0 +1,227 @@
+<apex:page docType="html-5.0"  controller="OrderController" standardStylesheets="false">
+<apex:slds />
+
+<table class="slds-table slds-table_bordered slds-table_cell-buffer slds-table_striped slds-no-row-hover">
+  <thead>
+    <tr class="slds-text-title_caps">
+      <th scope="col">
+        <div class="slds-truncate slds-align--absolute-center" title="Product Name"><h2>Contact Information</h2></div>
+        <div class="slds-truncate slds-align--absolute-center" title="Product Name"><h2>Product Information</h2></div>
+      </th>
+    </tr>
+
+
+  </thead>
+  <tbody>
+    <tr>
+      <td data-label="Account Name">
+        <div class="slds-truncate" title="Cloudhub">
+          <div class="slds-form-element">     
+            <div class="slds-form-element__control ">
+              <div>  <span>Email<abbr class="slds-required" title="required">*</abbr></span><input type="email" id="emailId" class="slds-input" placeholder="Email" value=""/></div>
+            </div>
+          </div>
+          <div class="slds-form-element">     
+            <div class="slds-form-element__control ">
+              <div>  <span>First Name<abbr class="slds-required" title="required">*</abbr></span><input type="text" id="firstNameId" class="slds-input" placeholder="First Name" value=""/></div>
+            </div>
+          </div>
+          <div class="slds-form-element">     
+            <div class="slds-form-element__control ">
+              <div>  <span>Last Name<abbr class="slds-required" title="required">*</abbr></span><input type="text" id="lastNameId" class="slds-input" placeholder="Last Name" value=""/></div>
+            </div>
+          </div>
+        </div>
+        <div class="slds-truncate custom" title="Cloudhub">
+          <div class="slds-form-element">     
+            <div class="slds-form-element__control">
+              <div>  <span>Product Name:</span><span>{!product[0].Product_Name__c}</span></div>
+              <div>  <span>Amount:</span><span id="amountId">{!product[0].Units_Available__c }</span></div>
+              <div>  <span>Cost:</span><span id="priceId">{!product[0].Unit_Price__c} $</span></div>
+              <div>  <span>Unit Count:<abbr class="slds-required" title="required">*</abbr></span><input type="text" id="inputAmountId" class="slds-input"  /></div>
+              <div>  <span>Total Amount:</span><span id="totalAmount">0</span></div>
+            </div>
+          </div> 
+        </div>
+      </td>
+    </tr>
+    <tr>
+      <td data-label="Contact">
+        <div class="slds-truncate slds-align--absolute-center" title="Buttons">
+          <a role="button" href="https://c.ap4.visual.force.com/apex/visualDescription?sfdc.tabName=01r6F000001dm1L&id={!intId}"  class="slds-button slds-button_outline-brand">Назад</a>
+          <a role="button" href="#"  class="slds-button slds-button_brand">Заказать</a>
+        </div>
+      </td>
+    </tr>
+  </tbody>
+</table>
+    
+    <ul>
+        <apex:repeat value="{!cont}" var="record" rows="10">
+        
+          <li> {!record.Email} {!record.FirstName} {!record.LastName}</li>
+        
+        </apex:repeat>
+    </ul>
+
+<apex:form >
+<!-- Вызов функции сортировок Apex класса  -->   
+<apex:inputHidden value="{!yourEmail}" id="myHiddenEmail" />
+<apex:inputHidden value="{!yourFirstName}" id="myHiddenFirstName" />
+<apex:inputHidden value="{!yourLastName}" id="myHiddenLastName" />
+<apex:inputHidden value="{!yourAmount}" id="myHiddenAmount" />
+<apex:actionFunction action="{!actionBuy}" name="callApexBuy" reRender="Details"/> 
+</apex:form>    
+
+<style>
+  .slds-form-element__control div{
+    display: flex;
+    justify-content: center;
+  }  
+  .custom .slds-form-element__control div:nth-child(3) input{
+    padding: 0;
+  }
+  .slds-form-element__control div input{
+    margin-bottom: 15px;
+  }         
+  .slds-form-element__control div span{
+    font-size: 20px;
+    display: block;
+    width: 100%;
+    margin-bottom: 10px;
+  }
+  .slds-form-element__control div span:nth-child(2n+1){
+    text-align: right;
+    margin-right: 10px;
+  }        
+
+
+  thead tr th{
+    display: flex;
+  }
+  .slds-scope .slds-table td {
+    display: flex;
+    justify-content: space-around;
+  }
+  .slds-truncate h2{
+    font-size: 25px;
+  }
+  .slds-truncate h3, .slds-truncate p{
+    margin-right: auto;
+  }
+  .slds-truncate p{
+    margin-bottom: 10px;
+    font-size: 16px;
+    color: #868686;
+  }
+  .slds-truncate h3{
+    font-size: 20px;
+    text-transform: uppercase;
+    color: #687C8E;
+  }
+
+  .slds-scope .slds-truncate{
+    white-space: normal;
+    padding: 10px;
+  }
+  .slds-scope tbody tr:nth-child(1) td .slds-truncate {
+    width: 25%;
+    display: flex;
+    align-items: center;
+    flex-direction: column;
+  }
+  .slds-form-element{
+    width: 100%;
+  }        
+</style>
+
+<script>
+  var inputAmountId = document.getElementById('inputAmountId');    
+  var totalAmount = document.getElementById('totalAmount');
+  var priceId = document.getElementById('priceId');   
+  var emailId = document.getElementById('emailId');  
+  var firstNameId = document.getElementById('firstNameId');  
+  var lastNameId = document.getElementById('lastNameId');  
+  var amountId = document.getElementById('amountId');  
+  var buyBtn = document.querySelectorAll('.slds-truncate a')[1];
+  var hiddenEmail = document.getElementById('j_id0:j_id6:myHiddenEmail');
+  var hiddenFirstName = document.getElementById('j_id0:j_id6:myHiddenFirstName');
+  var hiddenLastName = document.getElementById('j_id0:j_id6:myHiddenLastName');
+  var hiddenAmount = document.getElementById('j_id0:j_id6:myHiddenAmount');
+  inputAmountId.addEventListener('blur', inputAmount);
+  if(parseInt(amountId.innerHTML) == 0){
+  	alert('Товара нет в наличии');
+  }
+  
+  function inputAmount(){
+    console.log(totalAmount);
+    console.log(inputAmountId.value);
+    totalAmount.innerHTML = (inputAmountId.value * parseInt(priceId.innerHTML))+" $";
+    if ((parseInt(amountId.innerHTML) < inputAmountId.value) || (inputAmountId.value < 1) || (inputAmountId.value == '') || (isNaN(inputAmountId.value))){
+    	inputAmountId.classList.add('slds-has-error');
+    }else{
+    	inputAmountId.classList.remove('slds-has-error');
+    }
+    console.log(parseInt(priceId.innerHTML));
+    console.log(parseInt(amountId.innerHTML));
+  }
+  console.log(buyBtn);
+  buyBtn.addEventListener('click', callBtn);
+  
+  function callBtn(){
+    var flag;
+    if(emailId.value == "" || firstNameId.value == "" || lastNameId.value == "" || inputAmountId.value == ""){
+    	flag = true;
+    }else{
+    	flag = false;
+    }
+    if(!flag && !emailId.classList.contains('slds-has-error') && !firstNameId.classList.contains('slds-has-error') && !lastNameId.classList.contains('slds-has-error') && !inputAmountId.classList.contains('slds-has-error')){
+      hiddenFirstName.value = firstNameId.value;
+      hiddenLastName.value = lastNameId.value;
+      hiddenAmount.value = inputAmountId.value;
+      
+      
+      callApexBuy();
+      alert('Успешно');
+      window.location.reload();
+    }else {
+    	alert('Заполните корректно поля');
+    }
+  }
+  
+
+
+
+  var input = document.getElementsByTagName('input')
+  for(let i of input){
+   i.addEventListener('blur', check);
+ }
+ 
+ function check() {
+  if(this != inputAmountId) { 
+   if(this.value != '') {
+     // Здесь происходит дальнейшая проверка
+     if(this.type.toLowerCase() == "email"){
+      var pattern = /^([a-z0-9_\.-])+@[a-z0-9-]+\.([a-z]{2,4}\.)?[a-z]{2,4}$/i;
+      if(pattern.test(this.value)){
+        this.classList.remove('slds-has-error');
+        hiddenEmail.value = emailId.value; 
+      } else {
+        this.classList.add('slds-has-error');
+      }
+    }else
+    this.classList.remove('slds-has-error'); 
+    
+    
+  } else {
+     // Предупреждающее сообщение
+     this.classList.add('slds-has-error');   
+   }
+ }
+}
+
+
+
+
+</script>
+</apex:page>
